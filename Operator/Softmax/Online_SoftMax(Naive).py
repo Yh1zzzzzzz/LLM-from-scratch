@@ -1,5 +1,11 @@
 import math
 from math import exp
+"""
+This is a naive implementation of online softmax.
+It maintains a list of probabilities that are updated as new values are added.
+
+I use it as a component of flash attention.
+"""
 prob = []
 max_sofar = None
 sum = 0.0
