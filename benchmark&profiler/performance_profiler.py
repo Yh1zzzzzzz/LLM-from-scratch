@@ -2,12 +2,10 @@ import torch
 from typing import Callable
 from torch.profiler import ProfilerActivity
 def profile(description: str, run: Callable, num_warmups: int = 1, with_stack: bool = False):
-    # Warmup
     for _ in range(num_warmups):
         run()
     if torch.cuda.is_available():
-        torch.cuda.synchronize()  # Wait for CUDA threads to finish (important!)
-    # Run the code with the profiler
+        torch.cuda.synchronize()  
     with torch.profiler.profile(
             activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
             # Output stack trace for visualization
@@ -16,7 +14,7 @@ def profile(description: str, run: Callable, num_warmups: int = 1, with_stack: b
             experimental_config=torch._C._profiler._ExperimentalConfig(verbose=True)) as prof:
         run()
         if torch.cuda.is_available():
-            torch.cuda.synchronize()  # Wait for CUDA threads to finish (important!)
+            torch.cuda.synchronize()  
     # Print out table
     table = prof.key_averages().table(sort_by="cuda_time_total",
                                       max_name_column_width=80,

@@ -11,7 +11,7 @@ class VectorSoftmax:
         for i in range(len(x)):
             x[i] = torch.exp(x[i] - self.max_list[i])  # 减去最大值以避免溢出
             x[i] *= torch.sum
-
+            
     
 
         """
