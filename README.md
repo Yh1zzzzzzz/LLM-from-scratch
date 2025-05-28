@@ -1,9 +1,10 @@
 # 🚀 LLM from Scratch
 一个从零开始构建大语言模型(LLM)的完整项目，涵盖从底层算子实现到模型训练的全栈技术。
 # 🤔为什么创建这个项目？
-  **1. 我认为：Build From Scratch is the best way to learn!**
-  **2. 为了捡起作者本就忘得干干净净的pytorch、 cuda、 Triton基础**
-  **3. 为了扩充简历😋**
+
+1. **我认为：Build From Scratch is the best way to learn!**
+2. **为了捡起作者本就忘得干干净净的pytorch、 cuda、 Triton基础**
+3. **为了扩充简历😋**
 
 ## 📖 项目概述
 
@@ -83,7 +84,7 @@ cd LLM_scratch
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 pip install triton
 pip install numpy matplotlib seaborn
-
+```
 
 
 
