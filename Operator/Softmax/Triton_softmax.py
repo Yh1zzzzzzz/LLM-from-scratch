@@ -1,5 +1,32 @@
 import triton
 import triton.language as tl
+import torch
+@triton.jit
+def softmax_kernel(output_ptr, input_ptr, input_row_stride, output_row_stride, n_rows, n_cols, BLOCK_SIZE: tl.constexpr,
+                   num_stages: tl.constexpr):
+    # starting row of the program
+    row_start = tl.program_id(0)
+    row_step = tl.num_programs(0)
+    for row_idx in tl.range(row_start, n_rows, row_step, num_stages=num_stages):
+        # The stride represents how much we need to increase the pointer to advance 1 row
+        row_start_ptr = input_ptr + row_idx * input_row_stride
+        # The block size is the next power of two greater than n_cols, so we can fit each
+        # row in a single block
+        col_offsets = tl.arange(0, BLOCK_SIZE)
+        input_ptrs = row_start_ptr + col_offsets
+        # Load the row into SRAM, using a mask since BLOCK_SIZE may be > than n_cols
+        mask = col_offsets < n_cols
+        row = tl.load(input_ptrs, mask=mask, other=-float('inf'))
+        # Subtract maximum for numerical stability
+        row_minus_max = row - tl.max(row, axis=0)
+        # Note that exponentiation in Triton is fast but approximate (i.e., think __expf in CUDA)
+        numerator = tl.exp(row_minus_max)
+        denominator = tl.sum(numerator, axis=0)
+        softmax_output = numerator / denominator
+        # Write back output to DRAM
+        output_row_start_ptr = output_ptr + row_idx * output_row_stride
+        output_ptrs = output_row_start_ptr + col_offsets
+        tl.store(output_ptrs, softmax_output, mask=mask)
 def triton_softmax(x: torch.Tensor):
     # Allocate output tensor
     y = torch.empty_like(x)
@@ -8,34 +35,14 @@ def triton_softmax(x: torch.Tensor):
     block_size = triton.next_power_of_2(N)  # Each block contains all the columns
     num_blocks = M                          # Each block is a row
     # Launch kernel
-    triton_softmax_kernel[(M,)](
+    softmax_kernel[(M,)](
         x_ptr=x, y_ptr=y,
         x_row_stride=x.stride(0), y_row_stride=y.stride(0),
         num_cols=N, BLOCK_SIZE=block_size
     )
     return y
-@triton.jit
-def triton_softmax_kernel(x_ptr, y_ptr, x_row_stride, y_row_stride, num_cols, BLOCK_SIZE: tl.constexpr):
-    assert num_cols <= BLOCK_SIZE
-    # Process each row independently
-    row_idx = tl.program_id(0)
-    col_offsets = tl.arange(0, BLOCK_SIZE)
-    # Read from global memory
-    x_start_ptr = x_ptr + row_idx * x_row_stride
-    x_ptrs = x_start_ptr + col_offsets
-    x_row = tl.load(x_ptrs, mask=col_offsets < num_cols, other=float("-inf"))
-    # Compute
-    x_row = x_row - tl.max(x_row, axis=0)
-    numerator = tl.exp(x_row)
-    denominator = tl.sum(numerator, axis=0)
-    y_row = numerator / denominator
-    # Write back to global memory
-    y_start_ptr = y_ptr + row_idx * y_row_stride
-    y_ptrs = y_start_ptr + col_offsets
-    tl.store(y_ptrs, y_row, mask=col_offsets < num_cols)
 
-
-"""" ============     helper functions for Triton softmax     ============ """
+"""" ============     helper functions from Open AI Tutorails     ============ """
 properties = driver.active.utils.get_device_properties(DEVICE.index)
 NUM_SM = properties["multiprocessor_count"]
 NUM_REGS = properties["max_num_regs"]
