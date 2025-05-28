@@ -22,7 +22,6 @@ def triton_swiglu_kernel(x_ptr, gate_ptr, y_ptr, num_elements, BLOCK_SIZE: tl.co
     
     mask = offsets < num_elements
     
-    # 读取输入
     x = tl.load(x_ptr + offsets, mask=mask)
     gate = tl.load(gate_ptr + offsets, mask=mask)
     

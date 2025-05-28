@@ -12,7 +12,7 @@ def triton_gelu_kernel(x_ptr, y_ptr, num_elements, BLOCK_SIZE: tl.constexpr):
     mask = offsets < num_elements
     # Read
     x = tl.load(x_ptr + offsets, mask=mask)
-    # Approx gelu is 0.5 * x * (1 + tanh(sqrt(2/pi) * (x + 0.044715 * x^3)))
+    #  0.5 * x * (1 + tanh(sqrt(2/pi) * (x + 0.044715 * x^3)))
     a = 0.79788456 * (x + 0.044715 * x * x * x)
     exp = tl.exp(2 * a)
     tanh = (exp - 1) / (exp + 1)

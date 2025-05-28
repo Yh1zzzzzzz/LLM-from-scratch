@@ -4,28 +4,23 @@ class VectorSoftmax:
         self.logits_sum = []
         self.max_list = []
         self.Tensor = []
-    def forward(self, x : list[torch.Tensor]):
-        "传入的x是原始tensor，没有经过softmax处理的tensor列表。"
-        self.logits_sum.append(torch.sum(x))
-        self.max_list.append(torch.max(x))
-        for i in range(len(x)):
-            x[i] = torch.exp(x[i] - self.max_list[i])  # 减去最大值以避免溢出
-            x[i] *= torch.sum
-            
-    
+        self.Sofar  = []
 
-        """
-        for i in range(len(x)):
-            self.max_list.append(torch.max(x[i]))
-            self.scale_factor.append(torch.sum(x[i]))
+    def forward(self, x : torch.Tensor):
+        "传入的x是原始tensor，没有经过softmax处理的tensor列表。"
+        self.max_list.append(torch.max(x)) #记录每个tensor的最大值
+        #动态更新logits_sum
         self.Max = torch.max(torch.tensor(self.max_list))
-        for i in range(len(x)):
-            x[i] = torch.exp(self.max_list[i] - self.Max) * x[i]
-            self.sum += torch.sum(x[i])
-        for i in range(len(x)):
-            x[i] *= self.scale_factor[i] / self.sum
-        return torch.concatenate(x, dim=0)
-"""
+
+        self.logits_sum.append(torch.sum(torch.exp(x - self.max_list[-1]))) #记录每个tensor的softmax和
+        #补偿最大值
+        for i in range(len(self.max_list)):
+            self.Sofar[i] *= torch.exp(self.max_list[i] - self.Max)
+        #计算softmax
+        
+        
+
+
 VectorSoftmax = VectorSoftmax()
 softmax1 = torch.softmax(torch.tensor([1., 1., 1.]), dim=0)
 softmax2 = torch.softmax(torch.tensor([1., 1.]), dim=0)

@@ -20,10 +20,8 @@ def triton_relu_kernel(x_ptr, y_ptr, num_elements, BLOCK_SIZE: tl.constexpr):
     
     mask = offsets < num_elements
     
-    # 读取输入
     x = tl.load(x_ptr + offsets, mask=mask)
     
-    # ReLU: max(0, x)
     y = tl.maximum(x, 0.0)
     
     # 存储结果
@@ -40,14 +38,11 @@ def triton_relu_backward_kernel(grad_output_ptr, input_ptr, grad_input_ptr, num_
     
     mask = offsets < num_elements
     
-    # 读取梯度输出和输入
     grad_output = tl.load(grad_output_ptr + offsets, mask=mask)
     x = tl.load(input_ptr + offsets, mask=mask)
     
-    # ReLU的导数: 1 if x > 0 else 0
     grad_input = tl.where(x > 0.0, grad_output, 0.0)
     
-    # 存储结果
     tl.store(grad_input_ptr + offsets, grad_input, mask=mask)
 
 
