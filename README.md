@@ -13,11 +13,11 @@
 ## 🎯 项目进展
 
 ### ✅ 已完成
-- [y] 核心算子实现 
-- [y] 激活函数库 (GELU, ReLU, SwiGLU)
-- [y] CUDA/Triton内核开发
-- [y] 性能基准测试框架
-- [y] 自动求导支持
+- [✅] 完成了BPE分词器(PreTokenize Encode Decode  后续考虑用Rust｜CPP 重写一个速度更快的版本)
+- [✅] 核心算子实现 (使用Triton、CUDA、Pytorch实现)
+- [✅] CUDA/Triton内核开发
+- [✅] 性能基准测试框架
+- [✅] 自动求导支持 (所有使用Triton、CUDA实现的算子都兼容torch.autograd.Function)
 
 ### 🚧 进行中
 - [ ] 完整Transformer架构
