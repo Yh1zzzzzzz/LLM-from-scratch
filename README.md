@@ -18,7 +18,7 @@
 - [✅] 完成了BPE分词器(PreTokenize Encode Decode  后续考虑用Rust｜CPP 重写一个速度更快的版本)
 - [✅] Embeddings (Token-Embedding & Rotary Position Embedding(RoPE))
 - [✅] Transformer前向传播所需要的所有核心算子实现 (使用Triton、CUDA、Pytorch实现，并兼容torch.autograd)
-- [✅] 反向传播所需要的所有部件(LossFunction Optimizer Gradient clipping  Learning rate scheduling)
+- [✅] 反向传播所需要的所有部件(LossFunction & Optimizer & Gradient clipping & Learning rate scheduling)
 - [✅] 完整的训练框架(DataLoader CheckPoint Training Loop)
 - [✅] 性能基准测试框架
 - [✅] 自动求导支持 (所有使用Triton、CUDA实现的算子都兼容torch.autograd.Function)
