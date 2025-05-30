@@ -13,20 +13,18 @@
 ## 🎯 项目进展
 
 ### ✅ 已完成
+*** 以下的所有组件均为手工完成，不使用Pytorch现成组件 ***
 - [✅] 完成了BPE分词器(PreTokenize Encode Decode  后续考虑用Rust｜CPP 重写一个速度更快的版本)
-- [✅] 核心算子实现 (使用Triton、CUDA、Pytorch实现)
-- [✅] CUDA/Triton内核开发
+- [✅] Embeddings (Token-Embedding & Rotary Position Embedding(RoPE))
+- [✅] Transformer前向传播所需要的所有核心算子实现 (使用Triton、CUDA、Pytorch实现，并兼容torch.autograd)
+- [✅] 反向传播所需要的所有部件(LossFunction Optimizer Gradient clipping  Learning rate scheduling)
+- [✅] 完整的训练框架(DataLoader CheckPoint Training Loop)
 - [✅] 性能基准测试框架
 - [✅] 自动求导支持 (所有使用Triton、CUDA实现的算子都兼容torch.autograd.Function)
 
 ### 🚧 进行中
-- [ ] 完整Transformer架构
 - [ ] 模型并行策略
 - [ ] 数据处理流水线
-- [ ] Optimizer
-- [ ] Loss function
-- [ ] Tokenizer
-- [ ] Word embedding 
 
 ### 📋 计划中
 - [ ] 分布式训练
@@ -101,12 +99,6 @@ pip install numpy matplotlib seaborn
 
 本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
 
-## 🙏 致谢
-
-- **PyTorch团队** - 提供优秀的深度学习框架
-- **OpenAI Triton** - GPU内核编程语言
-- **NVIDIA** - CUDA计算平台
-- **Transformers社区** - 激发项目灵感
 
 ## 📞 联系方式
 
