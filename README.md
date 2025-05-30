@@ -13,7 +13,8 @@
 ## 🎯 项目进展
 
 ### ✅ 已完成
-*** 以下的所有组件均为手工完成，不使用Pytorch现成组件 ***
+
+**以下的所有组件均为手工完成，不使用Pytorch现成组件**
 - [✅] 完成了BPE分词器(PreTokenize Encode Decode  后续考虑用Rust｜CPP 重写一个速度更快的版本)
 - [✅] Embeddings (Token-Embedding & Rotary Position Embedding(RoPE))
 - [✅] Transformer前向传播所需要的所有核心算子实现 (使用Triton、CUDA、Pytorch实现，并兼容torch.autograd)
