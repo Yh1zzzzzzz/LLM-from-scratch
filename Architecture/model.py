@@ -136,7 +136,8 @@ class BasicsTransformerLM(nn.Module):
                 )
                 threshold = topk_values[:, -1]
                 topk_mask = temperature_scaled_next_token_logits < threshold
-                temperature_scaled_next_token_logits.masked_fill(topk_mask, float("-inf"))
+                # 避免就地操作，创建新张量
+                temperature_scaled_next_token_logits = temperature_scaled_next_token_logits.masked_fill(topk_mask, float("-inf"))
             next_token_probabilities = softmax(temperature_scaled_next_token_logits, dim=-1)
             next_token_id = torch.multinomial(next_token_probabilities, 1)
             if eos_token_id is not None and next_token_id.item() == eos_token_id:
