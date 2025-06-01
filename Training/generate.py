@@ -240,7 +240,7 @@ def main():
     
     # 需要重新构建词汇表（这是简化版本，实际应用中应该保存词汇表）
     print("警告: 需要重新构建词汇表，请确保使用相同的训练数据")
-    train_data_path = "../../cs336/hw/assignment1-basics/data/TinyStoriesV2-GPT4-train.txt"
+    train_data_path = "../../data/TinyStoriesV2-GPT4-train.txt"
     if Path(train_data_path).exists():
         print("从训练数据重建词汇表...")
         texts = []

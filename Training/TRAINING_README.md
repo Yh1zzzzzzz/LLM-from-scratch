@@ -27,8 +27,8 @@ LLM_scratch/
 
 确保TinyStories数据集位于正确路径：
 ```
-../../cs336/hw/assignment1-basics/data/TinyStoriesV2-GPT4-train.txt
-../../cs336/hw/assignment1-basics/data/TinyStoriesV2-GPT4-valid.txt
+../../data/TinyStoriesV2-GPT4-train.txt
+../../data/TinyStoriesV2-GPT4-valid.txt
 ```
 
 ### 2. 训练模型
@@ -41,8 +41,8 @@ LLM_scratch/
 或者手动运行：
 ```bash
 python train.py \
-    --train-data "../../cs336/hw/assignment1-basics/data/TinyStoriesV2-GPT4-train.txt" \
-    --val-data "../../cs336/hw/assignment1-basics/data/TinyStoriesV2-GPT4-valid.txt" \
+    --train-data "../../data/TinyStoriesV2-GPT4-train.txt" \
+    --val-data "../../data/TinyStoriesV2-GPT4-valid.txt" \
     --vocab-size 1000 \
     --d-model 256 \
     --num-layers 6 \
@@ -129,42 +129,3 @@ python generate.py \
     --config "./checkpoints/config.json" \
     --interactive
 ```
-
-## 注意事项
-
-1. **内存使用**: 根据你的硬件调整批次大小和序列长度
-2. **设备选择**: 脚本会自动检测可用设备（CUDA > MPS > CPU）
-3. **词汇表**: 使用简单的字符级分词器，适合小规模实验
-4. **检查点**: 训练过程中会自动保存最佳模型和定期检查点
-5. **日志**: 训练日志会显示损失、困惑度和吞吐量信息
-
-## 监控训练
-
-训练过程中会输出：
-- 每步损失值
-- 验证损失和困惑度
-- 训练速度（steps/sec）
-- 模型参数数量
-
-## 故障排除
-
-1. **CUDA内存不足**: 减少批次大小或序列长度
-2. **数据文件不存在**: 检查数据路径是否正确
-3. **权限问题**: 确保脚本有执行权限 (`chmod +x *.sh`)
-4. **Python路径**: 确保正确设置了PYTHONPATH
-
-## 扩展功能
-
-脚本支持以下扩展：
-- 添加更复杂的分词器（BPE等）
-- 实现学习率调度
-- 添加更多评估指标
-- 支持分布式训练
-- 模型量化和优化
-
-## 性能优化建议
-
-1. 使用适当的批次大小充分利用GPU
-2. 启用混合精度训练（需要修改代码）
-3. 使用数据并行加速训练
-4. 优化数据加载流水线

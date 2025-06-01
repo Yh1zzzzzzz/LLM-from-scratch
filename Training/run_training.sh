@@ -8,8 +8,8 @@ export PYTHONPATH="${PYTHONPATH}:$(pwd)"
 
 # 基本训练配置
 python train.py \
-    --train-data "../../cs336/hw/assignment1-basics/data/TinyStoriesV2-GPT4-valid.txt" \
-    --val-data "../../cs336/hw/assignment1-basics/data/TinyStoriesV2-GPT4-valid.txt" \
+    --train-data "../../data/TinyStoriesV2-GPT4-valid.txt" \
+    --val-data "../../data/TinyStoriesV2-GPT4-valid.txt" \
     --vocab-size 1000 \
     --context-length 512 \
     --d-model 256 \

@@ -384,10 +384,10 @@ def main():
     
     # 数据参数
     parser.add_argument("--train-data", type=str, 
-                       default="../../cs336/hw/assignment1-basics/data/TinyStoriesV2-GPT4-train.txt",
+                       default="../../data/TinyStoriesV2-GPT4-train.txt",
                        help="训练数据路径")
     parser.add_argument("--val-data", type=str,
-                       default="../../cs336/hw/assignment1-basics/data/TinyStoriesV2-GPT4-valid.txt", 
+                       default="../../data/TinyStoriesV2-GPT4-valid.txt", 
                        help="验证数据路径")
     
     # 模型参数
