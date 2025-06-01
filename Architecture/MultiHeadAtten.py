@@ -3,8 +3,10 @@ import torch.nn as nn
 from torch.nn import functional as F
 from math import sin, cos
 class MultiheadAttention(nn.Module):
-    def __init__(self, d_model, num_heads, device=torch.device("mps")) :
+    def __init__(self, d_model, num_heads, device=None) :
         super().__init__()
+        if device is None:
+            device = torch.device("cpu")
         self.WQ = nn.Parameter(torch.empty(d_model, d_model, device=device))
         self.WK = nn.Parameter(torch.empty(d_model, d_model, device=device))
         self.WV = nn.Parameter(torch.empty(d_model, d_model, device=device))
@@ -12,6 +14,15 @@ class MultiheadAttention(nn.Module):
         self.num_heads = num_heads
         self.d_model = d_model
         self.d_k = d_model // num_heads
+        self._init_weights()
+        
+    def _init_weights(self):
+        import math
+        std = math.sqrt(2.0 / (self.d_model + self.d_model))
+        nn.init.normal_(self.WQ, 0.0, std)
+        nn.init.normal_(self.WK, 0.0, std)
+        nn.init.normal_(self.WV, 0.0, std)
+        nn.init.normal_(self.WO, 0.0, std)
     def forward(self, x):
         Batch, seq , embed = x.shape
         mask = torch.triu(torch.full((seq, seq), float("-inf")), diagonal=1).to(x.device)
@@ -35,13 +46,14 @@ class MultiheadAttention(nn.Module):
 
 
 class RoPE(nn.Module):
-    def __init__(self, theta, d_k, max_seq_len, device=torch.device("mps")):
+    def __init__(self, theta, d_k, max_seq_len, device=None):
         super().__init__()
+        if device is None:
+            device = torch.device("cpu")
         self.theta = theta
         self.d_k = d_k
         self.max_seq_len = max_seq_len
         
-        # 预计算频率
         inv_freq = 1.0 / (theta ** (torch.arange(0, d_k, 2, device=device).float() / d_k))
         self.register_buffer('inv_freq', inv_freq)
         
