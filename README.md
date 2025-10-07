@@ -22,6 +22,8 @@
 - [✅] 完整的训练框架(DataLoader CheckPoint Training Loop)
 - [✅] 性能基准测试框架
 - [✅] 自动求导支持 (所有使用Triton、CUDA实现的算子都兼容torch.autograd.Function)
+- [✅] 完成了对Qwen2.5-Math-1.5B的ZeroShot Math Performance的测试，对其进行了SFT
+- [✅] 完成了GRPO，并基于此对Qwen2.5-Math-1.5B进行了RL优化其数学性能
 
 ### 🚧 进行中
 - [ ] 分布式数据并行训练
@@ -29,23 +31,6 @@
 - [ ] 模型对齐技术
 - [ ] 推理优化
 - [ ] 混合专家(MoE)实现
-
-
-## 🏗️ 项目架构
-
-```
-LLM_scratch/
-├── 🧮 Operator/                    # 核心算子实现
-├── ⚡ activation_function/          # 激活函数实现
-├── 📊 benchmark&profiler/          # 性能测试工具
-├── 🎯 Alignment/                   # 模型对齐技术
-├── 🏛️ Architecture/                # 模型架构设计
-├── 🌐 Data_Crawl/                  # 数据采集与处理
-├── 🔀 MoE/                         # 混合专家模型
-├── ⚖️ Parallelsim/                 # 并行训练策略
-├── 📈 Scaling/                     # 模型扩展规律
-└── 💾 Training_Data/               # 训练数据管理
-```
 
 
 ## 🚀 快速开始
@@ -70,6 +55,7 @@ cd LLM_scratch
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 pip install triton
 pip install numpy matplotlib seaborn
+pip install vllm
 ```
 
 
